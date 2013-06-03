@@ -1,0 +1,39 @@
+<grid name="myGrid">
+  <columns>
+    <column uniqueId="fname" label="First Name" dataType="string" description=""/>
+    <column uniqueId="lname" label="Last Name" dataType="string" description=""/>
+    <column uniqueId="addr1" label="Address 1" dataType="string" description=""/>
+    <column uniqueId="addr1" label="Address 1" dataType="string" description=""/>
+  </columns>
+
+  <dataSource>
+    <url>http://myhost:port/service</url>
+    <object name="myObject">
+      <property name="FirstName" type="string"/>
+      <property name="LastName" type="string"/>
+      <object name="TelephoneList"/>
+      <property name="Type" type="string"/>
+      <property name="Number" type="string"/>
+    </object>
+  </dataSource>
+
+  <dataMapper>
+    <process columnName="fname" propertyName="myObject.FirstName">
+      <transform></transform>
+      <formatting></formatting>
+    </process>
+  </dataMapper>
+
+  <settings>
+    <pagination showPageNavigationButtons="true" directPageNumberAccess="true" showTotalRecordCount="true">
+      <rowsPerPage defaultRowsPerPage="10">
+        <option hideWhenCountAbobe="250">10</option>
+        <option hideWhenCountAbove="750">25</option>
+        <option hideWhenCountAbove="1500">50</option>
+        <option hideWhenCountAbove="2000">100</option>
+        <option showWhenCountAbove="250">250</option>
+        <option showWhenCountAbove="500">500</option>
+      </rowsPerPage>
+    </pagination>
+  </settings>
+</grid>
