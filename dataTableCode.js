@@ -4,7 +4,7 @@ function renderTable(tableid, url) {
     globalTableId = tableid;
     menuData = [];
     var jsonDataForGrid = setColumnAndHtmlData(url, globalTableId);
-    setPaginationOptions(paginationOptions);
+//    setPaginationOptions(paginationOptions);
     if (jsonDataForGrid.totalRecords == "") {
         return;
     }
@@ -12,83 +12,53 @@ function renderTable(tableid, url) {
         menuData = getMenuData(jsonDataForGrid.totalRecords);
     }
     $(document).ready(function () {
+        var aoColumns = jsonDataForGrid["columnData"];
+        aoColumns[0]['bSortable'] = false;
+        aoColumns[0]['fnRender'] =  function (o, v) {
+            return '<input type="checkbox" name="someCheckbox"/>';
+        };
+
         $('#dataTable').dataTable({
-          //  "sDom": '<"H"lR>rt<"F"ip>',
-            "aoColumns": jsonDataForGrid["columnData"],
-            "fnDrawCallback": function (oSettings) {
-                $("#dataTable_filter").hide();
-                $("thead input[type='checkbox']").click(function () {
-                    var checkbox = $("#dataTable").find("tbody").find("input[type='checkbox']");
-                    if (checkbox.prop("checked") == false) {
-                        checkbox.prop('checked', true);
-                        $("#dataTable").find("tbody").find("tr").css('background-color', '#ffed9f');
-                    } else {
-                        checkbox.prop('checked', false);
-                        $("#dataTable").find("tbody").find("tr").css('background-color', 'white');
-                    }
-                });
-                $("tbody input[type='checkbox']").click(function () {
-                    var checkbox = $(this);
-                    console.log(checkbox.prop("checked"));
-                    if (checkbox.prop("checked") == false) {
-                        $(this).parent().parent().css('background-color', 'white');
-                    } else {
-                        $(this).parent().parent().css('background-color', '#ffed9f');
-                    }
-                });
-            },
+            "aoColumns": aoColumns,
+            "bFilter": true,
             "bProcessing": true,
+            "bPaginate": true,
             "sPaginationType": "bootstrap",
-            "aLengthMenu": menuData,
-            "iDisplayLength": defaultRowNumber,
-            "multipleSelection": true,
             "oLanguage": {
             	"sSearch": "Search all columns:",
-                "sInfo": paginationOptions.sInfo,
                 "sProcessing": "<img src='loader-big-black.gif' width ='30' height = '30'/>"
             },
             "bDestroy": true,
-            "bServerSide": false,
-            "aoColumnDefs": [
-                {
-                    aTargets: [0],
-                    'bSortable': false,
-                    fnRender: function (o, v) {
-                        return '<input type="checkbox" name="someCheckbox"/>';
-                    }
-                }
-            ],
             "sAjaxSource": jsonDataForGrid["defaultUrl"],
+            "sAjaxDataProp": "responseObject",
             "fnServerData": function (sSource, aoData, fnCallback) {
-              //  var pageNumber = this.fnPagingInfo().iPage;
-            	var pageNumber = 1;
-              //  var pageLimit = aoData[4].value;
                 setLogging(sSource);
-                //aoData.push({ "name": "limit", "value": pageLimit }, { "name": "page", "value": pageNumber });
-                //aoData.push({ "name": "limit", "value": pageLimit });
                 $.getJSON(sSource, aoData, function (json) {
-                    map = {};
-                    map["aaData"] = json["responseObject"];
-                    map["aaData"] = $.each(map["aaData"], function (key, value) {
-                        value["checkbox"] = "";
+                    var responseObjects = json['responseObject'];
+                    $.each(responseObjects, function(index, value) {
+                        json['responseObject'][index]['checkbox'] = "";
                     });
-                    map["iTotalRecords"] = jsonDataForGrid["totalRecords"];
-                    map["iTotalDisplayRecords"] = jsonDataForGrid["totalRecords"];
-                    fnCallback(map);
+                    fnCallback(json);
                 });
             }
-        }).columnFilter({
-        	sPlaceHolder:"head:after",
-			aoColumns: [ { type: "text"  },
-					     { type: "text" },
-					     { type: "text" },
-					     { type: "text" },
-					     { type: "text" }
-					]});
-
-
+        }).columnFilter(columnFilters);
     });
 }
+
+
+var initSelectCheckBoxes = function() {
+    $(document).on('change', "thead input[type='checkbox']", function () {
+        var checked = $(this).prop("checked");
+        $("#dataTable tbody input[type='checkbox']").prop("checked", checked);
+        $("#dataTable tbody td").toggleClass('checked_cell');
+    });
+
+    $(document).on('change', "tbody input[type='checkbox']" , function () {
+        var checked = $(this).prop("checked");
+        $(this).parent('td').toggleClass('checked_cell');
+        $(this).parent('td').siblings().toggleClass('checked_cell')
+    });
+};
 
 $(document).ready(function () {
     $('#logging-area').hide();
@@ -105,4 +75,6 @@ $(document).ready(function () {
         $('#logging-area').val('');
         renderTable(globalTableId, '');
     });
+
+    initSelectCheckBoxes();
 });

@@ -1,0 +1,7 @@
+.checked_cell {
+    background-color: #ffed9f !important;
+}
+
+#dataTable_filter {
+    display: none;
+}

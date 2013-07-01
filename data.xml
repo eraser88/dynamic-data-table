@@ -1,16 +1,16 @@
 <grid name="myGrid">
   <columns>
-    <column uniqueId="fname" label="First Name" dataType="string" description=""/>
-    <column uniqueId="lname" label="Last Name" dataType="string" description=""/>
-    <column uniqueId="addr1" label="Address 1" dataType="string" description=""/>
-    <column uniqueId="addr2" label="Address 2" dataType="string" description=""/>
+    <column uniqueId="shoppingBagId" label="Shopping Bag Id" dataType="number" description=""/>
+    <column uniqueId="ORDER_DATE" label="Order Date" dataType="date" description=""/>
+    <column uniqueId="ORDER_STATUS" label="Order Status" dataType="string" description=""/>
+    <column uniqueId="PRIMARY_PHONE_NUMBER" label="Primary Phone Number" dataType="string" description=""/>
   </columns>
 
   <dataSource>
-    <url>http://70.35.129.10:8443/DMS/api/projects/DFX/0.0/ORDERS?query=&amp;format=json&amp;apikey=66c50c9f-3a2b-4d1b-9e07-133df0e04e80&amp;ignore=</url>
+    <url>data.json?</url>
     <object name="myObject">
-      <property name="shoppingBagId" type="string"/>
-      <property name="ORDER_DATE" type="string"/>
+      <property name="shoppingBagId" type="number"/>
+      <property name="ORDER_DATE" type="date"/>
       <object name="TelephoneList"/>
       <property name="ORDER_STATUS" type="string"/>
       <property name="PRIMARY_PHONE_NUMBER" type="string"/>
@@ -18,19 +18,19 @@
   </dataSource>
 
   <dataMapper>
-    <process columnName="fname" propertyName="myObject.shoppingBagId">
+    <process columnName="shoppingBagId" propertyName="myObject.shoppingBagId">
       <transform></transform>
       <formatting></formatting>
     </process>
-    <process columnName="lname" propertyName="myObject.ORDER_DATE">
+    <process columnName="ORDER_DATE" propertyName="myObject.ORDER_DATE">
       <transform></transform>
       <formatting></formatting>
     </process>
-    <process columnName="addr1" propertyName="myObject.ORDER_STATUS">
+    <process columnName="ORDER_STATUS" propertyName="myObject.ORDER_STATUS">
       <transform></transform>
       <formatting></formatting>
     </process>
-    <process columnName="addr2" propertyName="myObject.PRIMARY_PHONE_NUMBER">
+    <process columnName="PRIMARY_PHONE_NUMBER" propertyName="myObject.PRIMARY_PHONE_NUMBER">
       <transform></transform>
       <formatting></formatting>
     </process>
