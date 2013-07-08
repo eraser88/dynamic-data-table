@@ -15,7 +15,7 @@ function renderTable(tableid, url) {
         var aoColumns = jsonDataForGrid["columnData"];
         aoColumns[0]['bSortable'] = false;
         aoColumns[0]['fnRender'] =  function (o, v) {
-            return '<input type="checkbox" name="someCheckbox"/>';
+            return '<input type="checkbox" name="rowCheckBox"/>';
         };
 
         $('#dataTable').dataTable({
@@ -26,7 +26,7 @@ function renderTable(tableid, url) {
             "sPaginationType": "bootstrap",
             "oLanguage": {
             	"sSearch": "Search all columns:",
-                "sProcessing": "<img src='loader-big-black.gif' width ='30' height = '30'/>"
+                "sProcessing": "<img src='images/loader-big-black.gif' width ='30' height = '30'/>"
             },
             "bDestroy": true,
             "sAjaxSource": jsonDataForGrid["defaultUrl"],

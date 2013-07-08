@@ -7,7 +7,7 @@
   </columns>
 
   <dataSource>
-    <url>data.json?</url>
+    <url>data/data.json?</url>
     <object name="myObject">
       <property name="shoppingBagId" type="number"/>
       <property name="ORDER_DATE" type="date"/>
